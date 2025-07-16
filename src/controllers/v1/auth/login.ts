@@ -3,6 +3,8 @@ import type { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcrypt';
 import { generateAccessToken, generateRefreshToken } from '@/lib/jwt';
 import { Token } from '@/models/token.model';
+import { Verification } from '@/models/verification.model';
+import { logger } from '@/lib/winston';
 
 type LoginData = Pick<CreateUserInput, 'email' | 'password'>;
 const login = async (req: Request, res: Response, next: NextFunction) => {
@@ -39,6 +41,16 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
         message: 'Invalid email or password',
       });
     }
+    const existingVerification = await Verification.findByUserId(
+      existingUser.id,
+    );
+    // If the user has a verification code, delete it
+    if (existingVerification) {
+      await Verification.deleteById(existingVerification.id);
+      logger.info(
+        `Deleted existing verification code for user: ${existingUser.id}`,
+      );
+    }
 
     const accessToken = generateAccessToken({
       id: existingUser.id,
@@ -53,6 +65,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
       token: refreshToken,
       user_id: existingUser.id,
     });
+
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',

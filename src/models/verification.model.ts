@@ -60,4 +60,19 @@ export class Verification {
       values: [id],
     });
   }
+
+  static async deleteByUserId(userId: string): Promise<void> {
+    await queryOne({
+      text: 'DELETE FROM verifications WHERE user_id = $1',
+      values: [userId],
+    });
+  }
+
+  static async findByUserId(userId: string): Promise<IVerification | null> {
+    const user = await queryOne<IVerification>({
+      text: 'SELECT * FROM verifications WHERE user_id = $1',
+      values: [userId],
+    });
+    return user;
+  }
 }
