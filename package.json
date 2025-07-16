@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "dist/server.js",
   "scripts": {
-    "create-tables": "ts-node src/lib/query.ts",
+    "create-tables": "ts-node -r tsconfig-paths/register src/lib/query.ts",
     "dev": "nodemon"
   },
   "keywords": [],
