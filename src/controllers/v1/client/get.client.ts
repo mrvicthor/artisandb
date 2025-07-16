@@ -1,7 +1,6 @@
 import { AuthenticatedRequest } from '@/middleware/authMiddleware';
 import { UserModel } from '@/models/user.model';
 import type { Response, NextFunction } from 'express';
-import { use } from 'react';
 
 export const getClientProfile = async (
   req: AuthenticatedRequest,

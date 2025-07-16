@@ -11,7 +11,7 @@ router.get(
   authorizeRole(['client']),
   getClientProfile,
 );
-router.post(
+router.put(
   '/client/profile',
   authenticate,
   authorizeRole(['client']),
