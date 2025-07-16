@@ -6,6 +6,7 @@ import { Token } from '@/models/token.model';
 
 type LogindData = Pick<CreateUserInput, 'email' | 'password'>;
 const login = async (req: Request, res: Response, next: NextFunction) => {
+  console.log('trigered login controller');
   try {
     const { email, password }: LogindData = req.body;
     // Login logic here
@@ -40,8 +41,14 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
       });
     }
 
-    const accessToken = generateAccessToken(existingUser.id);
-    const refreshToken = generateRefreshToken(existingUser.id);
+    const accessToken = generateAccessToken({
+      id: existingUser.id,
+      user_type: existingUser.user_type,
+    });
+    const refreshToken = generateRefreshToken({
+      id: existingUser.id,
+      user_type: existingUser.user_type,
+    });
 
     await Token.upsert({
       token: refreshToken,

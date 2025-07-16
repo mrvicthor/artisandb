@@ -1,8 +1,11 @@
 import jwt from 'jsonwebtoken';
 import config from '@/config';
 
-export const generateAccessToken = (userId: string): string => {
-  if (!userId?.trim()) {
+export const generateAccessToken = (user: {
+  id: string;
+  user_type: string;
+}): string => {
+  if (!user?.id?.trim()) {
     throw new Error('Valid userId is required');
   }
   if (!config.JWT_ACCESS_SECRET || !config.ACCESS_TOKEN_EXPIRY) {
@@ -10,17 +13,24 @@ export const generateAccessToken = (userId: string): string => {
   }
 
   try {
-    return jwt.sign({ userId }, config.JWT_ACCESS_SECRET, {
-      expiresIn: config.ACCESS_TOKEN_EXPIRY,
-      subject: 'accessApi',
-    });
+    return jwt.sign(
+      { id: user.id, user_type: user.user_type },
+      config.JWT_ACCESS_SECRET,
+      {
+        expiresIn: config.ACCESS_TOKEN_EXPIRY,
+        subject: 'accessApi',
+      },
+    );
   } catch (error) {
     throw new Error(`Failed to generate access token: ${error}`);
   }
 };
 
-export const generateRefreshToken = (userId: string): string => {
-  if (!userId?.trim()) {
+export const generateRefreshToken = (user: {
+  id: string;
+  user_type: string;
+}): string => {
+  if (!user?.id?.trim()) {
     throw new Error('Valid userId is required');
   }
   if (!config.REFRESH_TOKEN_EXPIRY || !config.REFRESH_TOKEN_EXPIRY) {
@@ -28,10 +38,14 @@ export const generateRefreshToken = (userId: string): string => {
   }
 
   try {
-    return jwt.sign({ userId }, config.JWT_REFRESH_SECRET, {
-      expiresIn: config.REFRESH_TOKEN_EXPIRY,
-      subject: 'refreshToken',
-    });
+    return jwt.sign(
+      { id: user.id, user_type: user.user_type },
+      config.JWT_REFRESH_SECRET,
+      {
+        expiresIn: config.REFRESH_TOKEN_EXPIRY,
+        subject: 'refreshToken',
+      },
+    );
   } catch (error) {
     throw new Error(`Failed to generate refresh token: ${error}`);
   }

@@ -1,8 +1,4 @@
-import jwt, {
-  JsonWebTokenError,
-  TokenExpiredError,
-  VerifyErrors,
-} from 'jsonwebtoken';
+import jwt, { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 import config from '@/config';
 import type { Request, Response, NextFunction } from 'express';
 import {
@@ -40,7 +36,10 @@ const refreshTokenHandler = async (
     }
     let jwtPayload;
     try {
-      jwtPayload = verifyRefreshToken(refreshToken) as { userId: string };
+      jwtPayload = verifyRefreshToken(refreshToken) as {
+        userId: string;
+        userType: string;
+      };
     } catch (error) {
       if (error instanceof TokenExpiredError) {
         return next({
@@ -71,7 +70,10 @@ const refreshTokenHandler = async (
       });
     }
 
-    const newAccessToken = generateAccessToken(jwtPayload.userId);
+    const newAccessToken = generateAccessToken({
+      id: jwtPayload.userId,
+      user_type: jwtPayload.userType,
+    });
     res.status(200).json({
       accessToken: newAccessToken,
       message: 'Access token refreshed successfully',

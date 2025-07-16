@@ -2,17 +2,17 @@ import { Router } from 'express';
 import { completeClientProfile } from '@/lib/profile';
 import authenticate from '@/middleware/authMiddleware';
 import authorizeRole from '@/middleware/authorizeRole';
-import { getClientProfile } from '@/controllers/v1/client/client.controller';
+import { getClientProfile } from '@/controllers/v1/client/get.client';
 
 const router = Router();
 router.get(
-  '/client-only',
+  '/client',
   authenticate,
   authorizeRole(['client']),
   getClientProfile,
 );
 router.post(
-  '/profile',
+  '/client/profile',
   authenticate,
   authorizeRole(['client']),
   completeClientProfile,

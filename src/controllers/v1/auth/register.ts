@@ -26,8 +26,14 @@ const register = async (
     await UserValidator.validateUniqueEmail(req.body.email);
     const user = await UserModel.create(req.body as CreateUserInput);
 
-    const accessToken = generateAccessToken(user.id);
-    const refreshToken = generateRefreshToken(user.id);
+    const accessToken = generateAccessToken({
+      id: user.id,
+      user_type: user.user_type,
+    });
+    const refreshToken = generateRefreshToken({
+      id: user.id,
+      user_type: user.user_type,
+    });
     const verificationCode = generateVerificationCode();
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
     await Token.create({ token: refreshToken, user_id: user.id });

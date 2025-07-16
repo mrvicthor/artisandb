@@ -1,5 +1,7 @@
 import { AuthenticatedRequest } from '@/middleware/authMiddleware';
+import { UserModel } from '@/models/user.model';
 import type { Response, NextFunction } from 'express';
+import { use } from 'react';
 
 export const getClientProfile = async (
   req: AuthenticatedRequest,
@@ -16,16 +18,23 @@ export const getClientProfile = async (
       return;
     }
 
-    // Fetch client profile logic here
-    // For example, you might fetch from a database
-    const clientProfile = {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      // Add other client-specific fields as needed
-    };
-
-    res.status(200).json(clientProfile);
+    const existingUser = await UserModel.findById(user.id);
+    if (!existingUser) {
+      res.status(404).json({
+        code: 'NotFound',
+        message: 'User not found',
+      });
+      return;
+    }
+    res.status(200).json({
+      id: existingUser.id,
+      firstName: existingUser.first_name,
+      lastName: existingUser.last_name,
+      email: existingUser.email,
+      phone: existingUser.phone,
+      user_type: existingUser.user_type,
+      email_verified: existingUser.email_verified,
+    });
   } catch (error) {
     next(error);
   }
