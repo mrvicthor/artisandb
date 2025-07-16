@@ -38,14 +38,18 @@ const verifyEmail = async (req: Request, res: Response, next: NextFunction) => {
     }
     const now = new Date();
     if (now > verifyUser?.expires_at) {
-      logger.error('Code has expired');
+      logger.warn(
+        `Expired verification code attempt: code=${verifyUser.code}, user_id=${verifyUser.user_id}`,
+      );
+      await Verification.deleteById(verifyUser.id);
       return next({
         status: 410,
         code: 'VerificationCodeExpired',
-        message: 'Verification code has expired',
+        message: 'Verification code has expired. Please request a new code.',
       });
     }
     await UserModel.updateUser(verifyUser.user_id, { email_verified: true });
+    await Verification.deleteById(verifyUser.id);
     res.status(200).json({
       message: 'User verification successful',
     });

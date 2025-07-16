@@ -53,4 +53,11 @@ export class Verification {
     });
     return user;
   }
+
+  static async deleteById(id: string): Promise<void> {
+    await queryOne({
+      text: 'DELETE FROM verifications WHERE id = $1',
+      values: [id],
+    });
+  }
 }

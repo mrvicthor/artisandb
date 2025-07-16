@@ -40,6 +40,7 @@ export interface UpdateUserInput {
   phone?: string;
   first_name?: string;
   last_name?: string;
+  password_hash?: string;
   profile_image_url?: string;
   email_verified?: boolean;
   phone_verified?: boolean;

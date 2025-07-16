@@ -4,11 +4,10 @@ import bcrypt from 'bcrypt';
 import { generateAccessToken, generateRefreshToken } from '@/lib/jwt';
 import { Token } from '@/models/token.model';
 
-type LogindData = Pick<CreateUserInput, 'email' | 'password'>;
+type LoginData = Pick<CreateUserInput, 'email' | 'password'>;
 const login = async (req: Request, res: Response, next: NextFunction) => {
-  console.log('trigered login controller');
   try {
-    const { email, password }: LogindData = req.body;
+    const { email, password }: LoginData = req.body;
     // Login logic here
     if (!email || !password) {
       return next({

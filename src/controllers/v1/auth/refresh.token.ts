@@ -1,12 +1,7 @@
-import jwt, { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
-import config from '@/config';
+import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
+
 import type { Request, Response, NextFunction } from 'express';
-import {
-  generateAccessToken,
-  verifyAccessToken,
-  verifyRefreshToken,
-} from '@/lib/jwt';
-import { logger } from '@/lib/winston';
+import { generateAccessToken, verifyRefreshToken } from '@/lib/jwt';
 import { Token } from '@/models/token.model';
 
 const refreshTokenHandler = async (
