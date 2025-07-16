@@ -43,8 +43,8 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Run migrations or create tables
-        run: yarn db:migrate || yarn run create-tables # Adjust to your setup
+      - name: Create tables
+        run: yarn run create-tables # Adjust to your setup
 
       - name: Run tests
         run: yarn test

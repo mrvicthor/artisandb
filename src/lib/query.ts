@@ -442,3 +442,15 @@ export async function createAllTables() {
     throw error;
   }
 }
+
+if (require.main === module) {
+  createAllTables()
+    .then(() => {
+      console.log('All tables created successfully');
+      process.exit(0);
+    })
+    .catch((err) => {
+      console.error('Error creating tables:', err);
+      process.exit(1);
+    });
+}
