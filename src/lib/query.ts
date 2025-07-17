@@ -23,6 +23,7 @@ export async function query(config: QueryConfig): Promise<QueryResult> {
     const result = await client.query(config.text, config.values);
     return result;
   } catch (error) {
+    console.error('Database query error:', error);
     logger.error('Database query error:', error);
     throw new DatabaseError('Database query failed', error as Error);
   } finally {

@@ -45,19 +45,49 @@ const userTypeSchema = z.enum(['client', 'provider'], {
   }),
 });
 
+const userIdSchema = z.string().uuid();
+const latitudeSchema = z.number().min(-90).max(90).optional();
+const longitudeSchema = z.number().min(-180).max(180).optional();
+const locationUpdateSchema = z.date().optional();
+const notificationPreferencesSchema = z.object({
+  email: z.boolean().default(true),
+  sms: z.boolean().default(false),
+  push: z.boolean().default(false),
+});
+const preferredServiceTimeSchema = z.string().max(100).optional();
+const emergencyContactNameSchema = z
+  .string()
+  .max(100, 'Emergency contact name must be less than 100 characters')
+  .optional();
+export const clientProfileSchema = z.object({
+  user_id: userIdSchema,
+  current_latitude: latitudeSchema,
+  current_longitude: longitudeSchema,
+  last_location_update: locationUpdateSchema,
+  preferred_service_time: preferredServiceTimeSchema,
+  notification_preferences: notificationPreferencesSchema.optional(),
+  emergency_contact_name: emergencyContactNameSchema,
+  emergency_contact_phone: phoneSchema.optional(),
+});
+
+export const updateClientSchema = z.object({
+  current_latitude: latitudeSchema,
+  current_longitude: longitudeSchema,
+  last_location_update: locationUpdateSchema,
+  preferred_service_time: preferredServiceTimeSchema,
+  notification_preferences: notificationPreferencesSchema.optional(),
+  emergency_contact_name: emergencyContactNameSchema,
+  emergency_contact_phone: phoneSchema.optional(),
+});
+
 const profileImageSchema = z.string().url('Invalid URL format').optional();
 
 export const createUserSchema = z.object({
   email: emailSchema,
-
   password: passwordSchema,
-
   phone: phoneSchema,
-
   first_name: firstNameSchema,
-
   last_name: lastNameSchema,
-
   user_type: userTypeSchema,
   profile_image_url: profileImageSchema,
 });

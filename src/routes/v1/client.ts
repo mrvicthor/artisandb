@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import { completeClientProfile } from '@/lib/profile';
 import authenticate from '@/middleware/authMiddleware';
 import authorizeRole from '@/middleware/authorizeRole';
 import { getClientProfile } from '@/controllers/v1/client/get.client';
+import createClient from '@/controllers/v1/client/create.client';
+import updateClient from '@/controllers/v1/client/update.client';
 
 const router = Router();
 router.get(
@@ -11,11 +12,18 @@ router.get(
   authorizeRole(['client']),
   getClientProfile,
 );
-router.put(
-  '/client/profile',
+router.post(
+  '/create-client',
   authenticate,
   authorizeRole(['client']),
-  completeClientProfile,
+  createClient,
+);
+
+router.put(
+  '/update-client/:id',
+  authenticate,
+  authorizeRole(['client']),
+  updateClient,
 );
 
 export default router;

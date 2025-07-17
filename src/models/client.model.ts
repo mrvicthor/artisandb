@@ -59,4 +59,43 @@ export class ClientModel {
     }
     return client;
   }
+
+  static async updateClient(
+    userId: string,
+    data: Partial<ClientProfile>,
+  ): Promise<ClientProfile> {
+    const config = {
+      text: `
+        UPDATE clients SET
+          current_latitude = COALESCE($2, current_latitude),
+          current_longitude = COALESCE($3, current_longitude),
+          preferred_service_time = COALESCE($4, preferred_service_time),
+          notification_preferences = COALESCE($5, notification_preferences),
+          emergency_contact_name = COALESCE($6, emergency_contact_name),
+          emergency_contact_phone = COALESCE($7, emergency_contact_phone),
+          last_location_update = COALESCE($8, last_location_update),
+          updated_at = CURRENT_TIMESTAMP
+        WHERE user_id = $1
+        RETURNING *;
+      `,
+      values: [
+        userId,
+        data.current_latitude ?? null,
+        data.current_longitude ?? null,
+        data.preferred_service_time ?? null,
+        data.notification_preferences
+          ? JSON.stringify(data.notification_preferences)
+          : null,
+        data.emergency_contact_name ?? null,
+        data.emergency_contact_phone ?? null,
+        data.last_location_update ?? null,
+      ],
+    };
+
+    const client = await queryOne<ClientProfile>(config);
+    if (!client) {
+      throw new Error('Failed to update client profile');
+    }
+    return client;
+  }
 }
