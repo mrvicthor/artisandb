@@ -4,6 +4,7 @@ import { UserModel } from '@/models/user.model';
 import { generateVerificationCode } from '@/utils/generateVerification';
 import { Verification } from '@/models/verification.model';
 import sendEmail from '@/services/emailService';
+import { logger } from '@/lib/winston';
 
 export const forgotPssword = async (
   req: Request,
@@ -39,6 +40,7 @@ export const forgotPssword = async (
       message: 'Password reset code sent to your email',
     });
   } catch (error) {
+    logger.error('Error in forgot password:', error);
     return next({
       status: 500,
       code: 'InternalServerError',

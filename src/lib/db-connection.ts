@@ -24,11 +24,11 @@ pool.on('connect', (client) => {
   client.query("SET application_name = 'artisan_services_app'");
 });
 
-pool.on('acquire', (client) => {
+pool.on('acquire', () => {
   logger.info('🔄 Client acquired from pool');
 });
 
-pool.on('error', (err, client) => {
+pool.on('error', (err) => {
   logger.error('❌ Unexpected error on idle client:', err);
 
   logger.error('Error details:', {
@@ -36,7 +36,7 @@ pool.on('error', (err, client) => {
   });
 });
 
-pool.on('remove', (client) => {
+pool.on('remove', () => {
   logger.info('🗑️ Client removed from pool');
 });
 
