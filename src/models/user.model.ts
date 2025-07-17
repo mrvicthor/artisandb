@@ -1,4 +1,4 @@
-import { queryOne } from '@/lib/query';
+import { queryMany, queryOne } from '@/lib/query';
 import { UserValidator } from '@/validation/userValidation';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
@@ -11,7 +11,7 @@ export interface User {
   first_name: string;
   last_name: string;
   profile_image_url: string;
-  user_type: 'client' | 'provider';
+  user_type: 'client' | 'provider' | 'admin';
   email_verified: boolean;
   phone_verified: boolean;
   status: 'active' | 'suspended' | 'inactive';
@@ -27,7 +27,7 @@ export interface CreateUserInput {
   phone?: string;
   first_name: string;
   last_name: string;
-  user_type: 'client' | 'provider';
+  user_type: 'client' | 'provider' | 'admin';
   profile_image_url?: string;
 }
 
@@ -140,5 +140,14 @@ export class UserModel {
       values,
     });
     return user;
+  }
+
+  static async getUsers(): Promise<User[]> {
+    const users = await queryMany<User>({
+      text: 'SELECT * FROM users WHERE deleted_at IS NULL',
+      values: [],
+    });
+
+    return users || [];
   }
 }

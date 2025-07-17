@@ -1,14 +1,9 @@
-import { getProviderProfile } from '@/controllers/v1/provider/provider.controller';
+import { getProviderProfile } from '@/controllers/v1/provider/get.provider';
 import authenticate from '@/middleware/authMiddleware';
-import authorizeRole from '@/middleware/authorizeRole';
+// import authorizeRole from '@/middleware/authorizeRole';
 import { Router } from 'express';
 
 const router = Router();
 
-router.get(
-  '/provider-only',
-  authenticate,
-  authorizeRole(['provider']),
-  getProviderProfile,
-);
+router.get('/provider-only', authenticate, getProviderProfile);
 export default router;

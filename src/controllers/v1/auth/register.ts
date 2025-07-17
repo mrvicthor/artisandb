@@ -16,11 +16,11 @@ const register = async (
 ): Promise<void> => {
   try {
     const { user_type } = req.body;
-    if (!['artisan', 'client'].includes(user_type)) {
+    if (!['provider', 'client'].includes(user_type)) {
       return next({
         status: 400,
         code: 'InvalidUserType',
-        message: 'User type must be artisan or client',
+        message: 'User type must be provider or client',
       });
     }
     await UserValidator.validateUniqueEmail(req.body.email);
