@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import config from '@/config';
 import type { Request, Response, NextFunction } from 'express';
+import { logger } from '@/lib/winston';
 
 export interface AuthenticatedRequest extends Request {
   user?: {
@@ -30,6 +31,7 @@ const authenticate = (
     req.user = decoded as AuthenticatedRequest['user'];
     next();
   } catch (error) {
+    logger.error('Authentication error:', error);
     res.status(401).json({ code: 'Unauthorized', message: 'Invalid token' });
   }
 };

@@ -1,10 +1,10 @@
 import pool from './db-connection';
-import { QueryResult } from 'pg';
+import { QueryResult, PoolClient } from 'pg';
 import { logger } from './winston';
 
 export interface QueryConfig {
   text: string;
-  values?: any[];
+  values?: (string | number | boolean | null | Date)[];
 }
 
 export class DatabaseError extends Error {
@@ -41,7 +41,7 @@ export async function queryMany<T>(config: QueryConfig): Promise<T[]> {
 }
 
 export async function transaction<T>(
-  callback: (client: any) => Promise<T>,
+  callback: (client: PoolClient) => Promise<T>,
 ): Promise<T> {
   const client = await pool.connect();
   try {

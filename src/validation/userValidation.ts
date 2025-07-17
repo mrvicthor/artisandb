@@ -65,11 +65,11 @@ export class UserValidator {
 }
 
 export class ValidationError extends Error {
-  public errors?: any[];
+  public errors?: z.ZodIssue[];
   public statusCode: number;
   public code: string;
 
-  constructor(message: string, errors?: any[]) {
+  constructor(message: string, errors?: z.ZodIssue[]) {
     super(message);
     this.name = 'ValidationError';
     this.errors = errors;
