@@ -90,7 +90,7 @@ export class UserModel {
         id,
         validatedData.email.toLowerCase(),
         passwordHash,
-        validatedData.phone,
+        validatedData.phone as string,
         validatedData.first_name,
         validatedData.last_name,
         validatedData.user_type,

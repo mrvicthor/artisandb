@@ -42,14 +42,14 @@ export class ClientModel {
       values: [
         id,
         data.user_id,
-        data.current_latitude,
-        data.current_longitude,
-        data.preferred_service_time,
+        data.current_latitude ?? null,
+        data.current_longitude ?? null,
+        data.preferred_service_time ?? null,
         data.notification_preferences
           ? JSON.stringify(data.notification_preferences)
           : null,
-        data.emergency_contact_name,
-        data.emergency_contact_phone,
+        data.emergency_contact_name ?? null,
+        data.emergency_contact_phone ?? null,
       ],
     };
 

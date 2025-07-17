@@ -31,7 +31,7 @@ export class Verification {
           id,
           data.code,
           data.user_id,
-          data.verification_type,
+          data.verification_type as string,
           data.expires_at,
         ],
       });

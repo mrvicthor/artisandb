@@ -34,14 +34,14 @@ export async function completeClientProfile({
         `,
     values: [
       user_id,
-      current_latitude,
-      current_longitude,
-      preferred_service_time,
+      current_latitude ?? null,
+      current_longitude ?? null,
+      preferred_service_time ?? null,
       notification_preferences
         ? JSON.stringify(notification_preferences)
         : null,
-      emergency_contact_name,
-      emergency_contact_phone,
+      emergency_contact_name ?? null,
+      emergency_contact_phone ?? null,
     ],
   };
 
@@ -86,11 +86,11 @@ export async function completeServiceProviderProfile({
         `,
     values: [
       user_id,
-      business_name,
-      bio,
-      current_latitude,
-      current_longitude,
-      service_radius,
+      business_name ?? null,
+      bio ?? null,
+      current_latitude ?? null,
+      current_longitude ?? null,
+      service_radius ?? null,
       is_online ?? false,
       is_available ?? false,
     ],
