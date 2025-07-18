@@ -16,9 +16,12 @@ export const getUsers = async (
       });
       return;
     }
+
+    const limit = Math.min(parseInt(req.query.limit as string) || 50, 100);
+    const offset = parseInt(req.query.offset as string) || 0;
     // Fetch all users from the UserModel
-    const users = await UserModel.getUsers();
-    console.log('Retrieved users:', users);
+    const users = await UserModel.getUsers(limit, offset);
+
     if (!users || users.length === 0) {
       res.status(404).json({
         code: 'NotFound',
@@ -26,9 +29,15 @@ export const getUsers = async (
       });
       return;
     }
+    const totalUsers = await UserModel.countUsers();
     res.status(200).json({
       message: 'Users retrieved successfully',
       users,
+      total: totalUsers,
+      limit,
+      offset,
+      page: Math.floor(offset / limit) + 1,
+      totalPages: Math.ceil(totalUsers / limit),
     });
   } catch (error) {
     next(error);

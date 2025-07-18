@@ -142,12 +142,20 @@ export class UserModel {
     return user;
   }
 
-  static async getUsers(): Promise<User[]> {
+  static async getUsers(limit = 50, offset = 0): Promise<User[]> {
     const users = await queryMany<User>({
-      text: 'SELECT * FROM users WHERE deleted_at IS NULL',
-      values: [],
+      text: 'SELECT * FROM users WHERE deleted_at IS NULL LIMIT $1 OFFSET $2',
+      values: [limit, offset],
     });
 
     return users || [];
+  }
+
+  static async countUsers(): Promise<number> {
+    const result = await queryOne<{ count: string }>({
+      text: 'SELECT COUNT(*) FROM users WHERE deleted_at IS NULL',
+      values: [],
+    });
+    return Number(result?.count || 0);
   }
 }

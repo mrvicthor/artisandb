@@ -119,4 +119,9 @@ API will be available at `http://localhost:3000/api/v1/`
 
 ---
 
-##
+## How to Query with Pagination
+
+First page: /users?limit=20&offset=0
+Second page: /users?limit=20&offset=20
+Third page: /users?limit=20&offset=40
+...and so on.
